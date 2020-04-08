@@ -3,7 +3,10 @@ import { View, Text, StyleSheet, Button, FlatList, TouchableOpacity } from 'reac
 
 import { CATEGORIES } from '../data/dummy-data';
 import Colors from '../constants/Colors';
-import CategoryGridTile from '../components/CategoryGridTile'
+import CategoryGridTile from '../components/CategoryGridTile';
+
+import { HeaderButtons, Item } from 'react-navigation-header-buttons';
+import HeaderButton from '../components/HeaderButton';
 
 
 
@@ -32,12 +35,22 @@ const CategoriesScreen = props => {
     );
 };
 
-CategoriesScreen.navigationOptions = {
-    headerTitle: 'Meal Categories',
-    headerStyle: {
-        backgroundColor: Colors.primaryColor
-    },
-    headerTintColor: 'white'
+CategoriesScreen.navigationOptions = (navData) => {
+
+    return {
+        headerTitle: 'Meal Categories',
+        headerStyle: {
+            backgroundColor: Colors.primaryColor
+        },
+        headerTintColor: 'white',
+        headerLeft: () => {
+            return (
+                <HeaderButtons HeaderButtonComponent={HeaderButton}>
+                    <Item title="Menu" iconName="ios-menu" onPress={() => { navData.navigation.toggleDrawer() }} />
+                </HeaderButtons>
+            )
+        }
+    }
 }
 
 const styles = StyleSheet.create({
