@@ -1,5 +1,5 @@
 import React from 'react';
-import { Platform } from 'react-native'
+import { Platform, Text } from 'react-native'
 import { createStackNavigator } from 'react-navigation-stack';
 import { createAppContainer } from 'react-navigation';
 import { createBottomTabNavigator } from 'react-navigation-tabs';
@@ -32,6 +32,12 @@ const MealsNavigator = createStackNavigator({
         headerStyle: {
             backgroundColor: Colors.primaryColor
         },
+        headerTitleStyle: {
+            fontFamily: 'open-sans'
+        },
+        headerBackTitleStyle: {
+            fontFamily: 'open-sans'
+        },
         headerTintColor: 'white'
     }
 });
@@ -55,7 +61,8 @@ const tabScreenConfig = {
             tabBarIcon: (tabInfo) => {
                 return <Ionicons name="ios-restaurant" size={25} color={tabInfo.tintColor} />
             },
-            tabBarColor: Colors.primaryColor
+            tabBarColor: Colors.primaryColor,
+            tabBarLabel: <Text style={{fontFamily: 'open-sans-bold'}}>Meals</Text>
         }
     },
     Favorites: {
@@ -64,7 +71,9 @@ const tabScreenConfig = {
             tabBarIcon: (tabInfo) => {
                 return <Ionicons name="ios-star" size={25} color={tabInfo.tintColor} />
             },
-            tabBarColor: Colors.secondaryColor
+            tabBarColor: Colors.secondaryColor,
+            tabBarLabel: <Text style={{fontFamily: 'open-sans-bold'}}>Favorites</Text>
+
         }
     }
 
@@ -72,12 +81,15 @@ const tabScreenConfig = {
 
 const MealsFavTabNavigator = Platform.OS === 'android' ? createMaterialBottomTabNavigator(tabScreenConfig, {
     activeColor: 'white',
-    shifting: true
+    shifting: true,
 })
     : createBottomTabNavigator(
         tabScreenConfig,
         {
             tabBarOptions: {
+                labelStyle: {
+                    fontFamily: 'open-sans-bold'
+                },
                 activeTintColor: 'Colors.secondaryColor'
             }
 
@@ -85,11 +97,33 @@ const MealsFavTabNavigator = Platform.OS === 'android' ? createMaterialBottomTab
 
 const FiltersNavigator = createStackNavigator({
     Filters: FiltersScreen
+}, {
+    navigationOptions: {
+        drawerLabel: 'My Filters'
+    },
+    defaultNavigationOptions: {
+        headerStyle: {
+            backgroundColor: Colors.primaryColor
+        },
+        headerTintColor: 'white'
+    }
 });
 
 const MainNavigation = createDrawerNavigator({
-    MealsFavs: MealsFavTabNavigator,
+    MealsFavs: {
+        screen: MealsFavTabNavigator,
+        navigationOptions: {
+            drawerLabel: 'Meals'
+        }
+    },
     Filters: FiltersNavigator,
+}, {
+   contentOptions: {
+       activeTintColor: Colors.secondaryColor,
+       labelStyle: {
+           fontFamily: 'open-sans-bold'
+       }
+   } 
 })
 
 
