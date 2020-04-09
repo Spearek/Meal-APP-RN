@@ -1,9 +1,18 @@
 import React from 'react';
-import { View, Text, StyleSheet, Button } from 'react-native';
+import { View, ScrollView, Text, StyleSheet, Button, Image } from 'react-native';
 import { HeaderButtons, Item } from 'react-navigation-header-buttons'
 
 import { MEALS } from '../data/dummy-data';
 import HeaderButton from '../components/HeaderButton';
+import DefaultText from '../components/DefaultText';
+
+const ListItem = props => {
+    return (
+        <View style={styles.listItem}>
+            <DefaultText>{props.children}</DefaultText> 
+        </View>)
+}
+// ^^ to osobny komponent ale robię go w tym samym pliku bo nigdzie indzie nie będę z niego korzystał
 
 const MealDetailScreen = props => {
 
@@ -12,15 +21,19 @@ const MealDetailScreen = props => {
     const selectedMeal = MEALS.find(meal => meal.id === mealId);
 
     return (
-        <View style={styles.screen}>
-            <Text>{selectedMeal.title}</Text>
-            <Button title='Go Back to previous Screen' onPress={() => {
-                props.navigation.goBack();
-            }} />
-            <Button title='Go Back to first Screen' onPress={() => {
-                props.navigation.popToTop();
-            }} />
-        </View>
+        <ScrollView>
+            <Image source={{ uri: selectedMeal.imageUrl }} style={styles.image} />
+            <View style={styles.details}>
+                <DefaultText>{selectedMeal.duration}m</DefaultText>
+                <DefaultText>{selectedMeal.complexity.toUpperCase()}</DefaultText>
+                <DefaultText>{selectedMeal.affordability.toUpperCase()}</DefaultText>
+            </View>
+            <Text style={styles.title}>Ingredients</Text>
+            {selectedMeal.ingredients.map(ingredient => <ListItem key={ingredient}>{ingredient}</ListItem>)}
+            <Text style={styles.title}>Steps</Text>
+            {selectedMeal.steps.map(step => <ListItem key={step}>{step}</ListItem>)}
+        </ScrollView>
+
     );
 };
 
@@ -44,10 +57,26 @@ MealDetailScreen.navigationOptions = (navigationData) => {
 
 
 const styles = StyleSheet.create({
-    screen: {
-        flex: 1,
-        justifyContent: 'center',
-        alignItems: 'center'
+    image: {
+        width: '100%',
+        height: 200
+    },
+    details: {
+        flexDirection: 'row',
+        padding: 15,
+        justifyContent: 'space-around'
+    },
+    title: {
+        fontFamily: 'open-sans-bold',
+        fontSize: 22,
+        textAlign: 'center'
+    },
+    listItem: {
+        marginVertical: 10,
+        marginHorizontal: 20,
+        borderColor: '#ccc',
+        borderWidth: 1,
+        padding: 10
     }
 });
 
